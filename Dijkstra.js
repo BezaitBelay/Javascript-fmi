@@ -1,12 +1,10 @@
-function myTrim(x) {
-  return x.replace(/^\s+|\s+$|\[|\],|\]/gm, '');
+function myTrim(word) {
+  return word.replace(/^\s+|\s+$|\[|\],|\]/gm, '');
 }
 
-const max = Number.MAX_SAFE_INTEGER;
-
-function loadMap() {
+function loadMap(fileName) {
   let fs = require('fs');
-  let text = fs.readFileSync('./map15x15.txt').toString();
+  let text = fs.readFileSync().toString();
   let textByLine = text.split('\n');
 
   let matrix = [];
@@ -22,7 +20,10 @@ function loadMap() {
   return matrix;
 }
 
-let map = loadMap();
+let fileName = './map15x15.txt';
+let map = loadMap(fileName);
+
+const max = Number.MAX_SAFE_INTEGER;
 
 function dijkstraAlgorithm(map) {
   let distance = map[0];
@@ -35,16 +36,19 @@ function dijkstraAlgorithm(map) {
       if (map[visited[i]][j] !== max) {
         if (!visited.includes(j)) visited.push(j);
 
-        if (distance[j] > map[visited[i]][j] + distance[visited[i]]) {
-          distance[j] = map[visited[i]][j] + distance[visited[i]];
+        let row = visited[i];
+        if (distance[j] > map[row][j] + distance[row]) {
+          distance[j] = map[row][j] + distance[row];
         }
-        if (distance[visited[i]] > map[visited[i]][j] + distance[j]) {
-            distance[visited[i]] = map[visited[i]][j] + distance[j];
+        if (distance[row] > map[row][j] + distance[j]) {
+            distance[row] = map[row][j] + distance[j];
           }
       }
     }
   }
-  console.log(distance);
+  distance.forEach((element,index) => {
+    console.log(`The shortest way to ${index+1} is ${element}`);
+  });
 }
 
 dijkstraAlgorithm(map);
